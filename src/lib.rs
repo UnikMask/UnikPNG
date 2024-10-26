@@ -24,6 +24,17 @@ const fn generate_crc_table() -> [u64; 256] {
 }
 const CRC_TABLE: [u64; 256] = generate_crc_table();
 
+const ADAM_7_PATTERN: [[u8; 8]; 8] = [
+    [1, 6, 4, 6, 2, 6, 4, 6],
+    [7; 8],
+    [5, 6, 5, 6, 5, 6, 5, 6],
+    [7; 8],
+    [3, 6, 4, 6, 3, 6, 4, 6],
+    [7; 8],
+    [5, 6, 5, 6, 5, 6, 5, 6],
+    [7; 8],
+];
+
 pub fn add(left: u64, right: u64) -> u64 {
     left + right
 }
