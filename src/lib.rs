@@ -7,7 +7,7 @@ const fn generate_crc_table() -> [u64; 256] {
         loop {
             c = match c & 1 {
                 1 => 0xedb88320_u64 ^ (c >> 1),
-                _ => c >> 1
+                _ => c >> 1,
             };
             k += 1;
             if k >= 8 {
