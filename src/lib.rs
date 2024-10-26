@@ -25,6 +25,19 @@ const fn generate_crc_table() -> [u64; 256] {
 }
 const CRC_TABLE: [u64; 256] = generate_crc_table();
 
+enum FilterType {
+    None = 0,
+    Sub,
+    Up,
+    Average,
+    Paeth
+}
+
+enum InterlacingMode {
+    Mode0 = 0,
+    Mode1
+}
+
 const ADAM_7_PATTERN: [[u8; 8]; 8] = [
     [1, 6, 4, 6, 2, 6, 4, 6],
     [7; 8],
