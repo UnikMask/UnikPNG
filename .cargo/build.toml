@@ -1,0 +1,18 @@
+[build]
+rustflags = [
+  "-Dclippy::pedantic",
+  "-Dclippy::todo",
+  "-Dclippy::multiple_inherent_impl",
+  "-Dclippy::panic_in_result_fn",
+  "-Dclippy::rest_pat_in_fully_bound_structs",
+  "-Dclippy::same_name_method",
+  "-Dclippy::string_to_string",
+  "-Dclippy::unnecessary_self_imports",
+  "-Dclippy::unwrap_in_result",
+  "-Dclippy::unwrap_used",
+  "-Dclippy::use_debug",
+  "-Dclippy::unimplemented",
+  "-Dclippy::unneeded_field_pattern",
+  "-Dclippy::clone_on_ref_ptr",
+  "-Aclippy::module-name-repetitions"
+]
