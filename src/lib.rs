@@ -23,7 +23,78 @@ const fn generate_crc_table() -> [u64; 256] {
     }
     res
 }
+
+const fn generate_fixed_huffman_code_int_sequence() -> [u16; 288] {
+    let mut res = [0_u16; 288];
+    let mut i = 0;
+    loop {
+        if i >= 288 {
+            break;
+        }
+        res[i] = match i {
+            256..=279 => 7,
+            0..=143 | 280.. => 8,
+            144..=255 => 9,
+        };
+        i += 1;
+    };
+    res
+}
+
+const fn get_bl_count<const N: usize, const MAX_BITS: usize>(int_sequence: [u16; N]) -> [u16; MAX_BITS] {
+    let mut res = [0; MAX_BITS];
+    let mut i = 0;
+    loop {
+        if i >= N {
+            break;
+        }
+        res[int_sequence[i] as usize - 1] += 1;
+        i += 1;
+    }
+    res
+}
+
+const fn generate_huffman_tree<const MAX_BITS: usize, const SIZE: usize>(int_sequence: [u16; SIZE]) -> [u16; SIZE] {
+    // 1. Generate amount of symbols using each number of bits
+    let mut bl_count = [0; MAX_BITS];
+    let mut i = 0;
+    loop {
+        if i >= MAX_BITS {
+            break;
+        }
+        bl_count[int_sequence[i] as usize - 1] += 1;
+        i += 1;
+    }
+
+    // 2. Generate next code for all bit sizes
+    let mut next_code = [0; MAX_BITS];
+    let (mut bits, mut code) = (0, 0);
+    loop {
+        if bits >= MAX_BITS {
+            break;
+        }
+        code = (code + bl_count[bits]) << 1;
+        next_code[bits] = code;
+        bits += 1;
+    }
+
+    // 3. Assign values to all symbols.
+    let mut n = 0;
+    let mut res = [0; SIZE];
+    loop {
+        if n >= SIZE {
+            break;
+        }
+        let len = int_sequence[n] - 1;
+        res[n] = next_code[len as usize];
+        next_code[len as usize] += 1;
+        n += 1;
+    }
+    [0; SIZE]
+}
+
 const CRC_TABLE: [u64; 256] = generate_crc_table();
+const FIXED_HUFFMAN_TREE: [u16; 288] = generate_huffman_tree::<9, 288>(generate_fixed_huffman_code_int_sequence());
 
 enum FilterType {
     None = 0,
