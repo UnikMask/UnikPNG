@@ -59,7 +59,7 @@ const fn generate_huffman_tree<const MAX_BITS: usize, const SIZE: usize>(int_seq
     let mut bl_count = [0; MAX_BITS];
     let mut i = 0;
     loop {
-        if i >= MAX_BITS {
+        if i >= SIZE {
             break;
         }
         bl_count[int_sequence[i] as usize - 1] += 1;
@@ -68,12 +68,12 @@ const fn generate_huffman_tree<const MAX_BITS: usize, const SIZE: usize>(int_seq
 
     // 2. Generate next code for all bit sizes
     let mut next_code = [0; MAX_BITS];
-    let (mut bits, mut code) = (0, 0);
+    let (mut bits, mut code) = (1, 0);
     loop {
         if bits >= MAX_BITS {
             break;
         }
-        code = (code + bl_count[bits]) << 1;
+        code = (code + bl_count[bits - 1]) << 1;
         next_code[bits] = code;
         bits += 1;
     }
@@ -90,7 +90,7 @@ const fn generate_huffman_tree<const MAX_BITS: usize, const SIZE: usize>(int_seq
         next_code[len as usize] += 1;
         n += 1;
     }
-    [0; SIZE]
+    res
 }
 
 const CRC_TABLE: [u64; 256] = generate_crc_table();
